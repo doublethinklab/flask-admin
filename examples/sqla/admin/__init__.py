@@ -1,24 +1,29 @@
-from flask import Flask, request, session
+from flask import Flask
+from flask import request
+from flask import session
+from flask_babel import Babel
 from flask_sqlalchemy import SQLAlchemy
-from flask_babelex import Babel
-
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
+app.config.from_pyfile("config.py")
 db = SQLAlchemy(app)
 
-# Initialize babel
-babel = Babel(app)
 
-
-@babel.localeselector
 def get_locale():
-    override = request.args.get('lang')
+    override = request.args.get("lang")
 
     if override:
-        session['lang'] = override
+        session["lang"] = override
 
-    return session.get('lang', 'en')
+    return session.get("lang", "en")
 
 
-import admin.main
+# Initialize babel
+babel = Babel(app, locale_selector=get_locale)
+
+
+# Initialize babel
+babel = Babel(app, locale_selector=get_locale)
+
+
+import admin.main  # noqa: F401, E402
